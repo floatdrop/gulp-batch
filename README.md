@@ -64,7 +64,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 [npm-image]: https://badge.fury.io/js/gulp-batch.png
 
 [travis-url]: http://travis-ci.org/floatdrop/gulp-batch
-[travis-image]: https://secure.travis-ci.org/floatdrop/gulp-batch.png?branch=master
+[travis-image]: https://travis-ci.org/floatdrop/gulp-batch.png?branch=master
 
 [depstat-url]: https://david-dm.org/floatdrop/gulp-batch
 [depstat-image]: https://david-dm.org/floatdrop/gulp-batch.png
