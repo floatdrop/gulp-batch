@@ -2,7 +2,7 @@
 
 > Event batcher for gulp-watch'er.
 
-This is problem solver for [this issue](https://github.com/gulpjs/gulp/issues/80) with `gulp-watch` and `gulp-mocha`.
+This is problem solver for [this issue](https://github.com/gulpjs/gulp/issues/80) with [gulp.watch](https://github.com/gulpjs/gulp#gulpwatchglob-cb) and [gulp-mocha](https://github.com/sindresorhus/gulp-mocha).
 Long story short - example below without `batch`'ing will call mocha as many times, as many files was changed (for example `git checkout` can touch dozens files).
 
 ## Usage
@@ -19,6 +19,7 @@ var batch = require('gulp-batch');
 gulp.watch(['test/**', 'lib/**'], batch(function (events, cb) {
     gulp.src(['test/*.js'])
         .pipe(mocha({ reporter: 'list' }))
+        .on('error', console.log.bind(console))
         .on('end', cb);
 }));
 ```

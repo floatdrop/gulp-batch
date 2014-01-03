@@ -3,14 +3,15 @@
 var gulp = require('gulp');
 var mocha = require('gulp-mocha');
 var batch = require('./index.js');
-require('./enable-power-assert.js');
 
 function noop() {}
 
 gulp.task('mocha', function () {
     gulp.src(['test/*.js'])
         .pipe(mocha({ reporter: 'list' }))
-        .on('error', noop);
+        .on('error', function (error) {
+            console.log(error.stack);
+        });
 });
 
 gulp.task('watch', function () {

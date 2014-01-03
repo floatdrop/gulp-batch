@@ -3,7 +3,7 @@
   "version": "0.0.5",
   "description": "Event batcher for gulp-watcher",
   "main": "index.js",
-  "keyworkds": "gulp batch throttle debounce",
+  "keywords": ["gulp", "batch", "throttle", "debounce", "gulpplugin", "watch", "mocha"],
   "scripts": {
     "test": "gulp mocha"
   },
