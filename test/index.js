@@ -58,17 +58,14 @@ describe('glob-batch', function () {
     it('should support done callback function', function (done) {
         var iterator = async.iterator([
             function (events, cb) {
-                receiver('three');
-                receiver('four');
-                receiver('five');
+                receiver('two');
                 setTimeout(function () {
                     cb();
-                    receiver('six');
-                    receiver('seven');
+                    receiver('three');
                 }, 15);
             },
             function (events) {
-                assert.equal(events.length, 5);
+                assert.equal(events.length, 2);
                 done();
             }
         ]);
@@ -76,7 +73,26 @@ describe('glob-batch', function () {
             iterator = iterator(events, cb);
         });
         receiver('one');
-        receiver('two');
+    });
+
+    it('should support debounce option', function (done) {
+        var iterator = async.iterator([
+            function (events, cb) {
+                receiver('two');
+                setTimeout(function () {
+                    cb();
+                    setTimeout(receiver.bind(null, 'three'), 15);
+                }, 15);
+            },
+            function (events) {
+                assert.equal(events.length, 2);
+                done();
+            }
+        ]);
+        var receiver = batch({ timeout: 10, debounce: 10 }, function (events, cb) {
+            iterator = iterator(events, cb);
+        });
+        receiver('one');
     });
 
     it('should throw, if we provide invalid callback', function () {

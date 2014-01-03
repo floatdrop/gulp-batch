@@ -24,8 +24,15 @@ module.exports = function (opts, cb) {
     }
 
     function async() {
-        holdOn = false;
-        brace();
+        if (opts.debounce) {
+            setTimeout(function () {
+                holdOn = false;
+                brace();
+            }, opts.debounce);
+        } else {
+            holdOn = false;
+            brace();
+        }
     }
 
     function flush() {

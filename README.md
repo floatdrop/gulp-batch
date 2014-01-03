@@ -42,7 +42,7 @@ __Callback signature__: `function(events, [done])`.
 
 __Options__:
 
- * `debounce` - __Not implemented yet__ Minimal interval between calling callback (default: `0`)
+ * `debounce` - Minimal interval between calling callback after `done` (only works with async callback) (default: `0`)
  * `limit` - Maximum events number, that gets into one batch (default: `undefined` - unlimited)
  * `timeout` - Interval in milliseconds, that counts as "no more events will arrive" (default: `200`)
 
