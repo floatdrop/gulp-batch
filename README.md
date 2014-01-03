@@ -16,12 +16,10 @@ var gulp = require('gulp');
 var mocha = require('gulp-mocha');
 var batch = require('gulp-batch');
 
-gulp.watch(['test/**', 'lib/**'], batch(function (events) {
+gulp.watch(['test/**', 'lib/**'], batch(function (events, cb) {
     gulp.src(['test/*.js'])
         .pipe(mocha({ reporter: 'list' }))
-        .on('error', function() {
-            // Suppress errors, so gulp-watch keep going
-        });
+        .on('end', cb);
 }));
 ```
 
