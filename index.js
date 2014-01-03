@@ -14,15 +14,31 @@ module.exports = function (opts, cb) {
     opts.timeout = opts.timeout || 200;
 
     var batch = [];
+    var holdOn;
+    var timeout;
+
+    function brace() {
+        if (!holdOn && batch.length) {
+            timeout = setTimeout(flush, opts.timeout);
+        }
+    }
+
+    function async() {
+        holdOn = false;
+        brace();
+    }
 
     function flush() {
         if (!batch.length) { return; }
         var _batch = batch;
         batch = [];
-        process.nextTick(cb.bind(null, _batch));
+        if (cb.length < 2) {
+            process.nextTick(cb.bind(null, _batch));
+        } else {
+            holdOn = true;
+            process.nextTick(cb.bind(null, _batch, async));
+        }
     }
-
-    var timeout;
 
     return function (event) {
         batch.push(event);
@@ -30,9 +46,8 @@ module.exports = function (opts, cb) {
 
         if (opts.limit && batch.length >= opts.limit) {
             flush();
-            return;
+        } else {
+            brace();
         }
-
-        timeout = setTimeout(flush, opts.timeout);
     };
 };

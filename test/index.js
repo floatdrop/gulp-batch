@@ -4,44 +4,79 @@
 delete require.cache[require.resolve('..')];
 var batch = require('..');
 var assert = require('power-assert');
+var async = require('async');
 
 describe('glob-batch', function () {
     it('should batch sync calls to array', function (done) {
-        var reciever = batch(function (events) {
+        var receiver = batch({ timeout: 10 }, function (events) {
             assert.equal(events.length, 2);
             done();
         });
-        reciever('one');
-        reciever('two');
+        receiver('one');
+        receiver('two');
     });
 
     it('should batch async calls to array', function (done) {
-        var reciever = batch({ timeout: 200 }, function (events) {
+        var receiver = batch({ timeout: 10 }, function (events) {
             assert.equal(events.length, 2);
             done();
         });
-        reciever('one');
-        setTimeout(reciever.bind(null, 'two'), 100);
+        receiver('one');
+        setTimeout(receiver.bind(null, 'two'), 5);
     });
 
     it('should flush, if we exceed timeout', function (done) {
-        var flushes = 0;
-        var reciever = batch({ timeout: 100 }, function (events) {
-            assert.equal(events.length, 1);
-            flushes += 1;
-            if (flushes === 2) { done(); }
+        var iterator = async.iterator([
+            function (events) { assert.equal(events.length, 1); },
+            function () { done(); }
+        ]);
+
+        var receiver = batch({ timeout: 5 }, function (events) {
+            iterator = iterator(events);
         });
-        reciever('one');
-        setTimeout(reciever.bind(null, 'two'), 200);
+
+        receiver('one');
+        setTimeout(receiver.bind(null, 'two'), 10);
     });
 
     it('should flush, if we exceed limit', function (done) {
-        var reciever = batch({ limit: 2 }, function (events) {
-            if (events.length === 2) { done(); }
+        var iterator = async.iterator([
+            function (events) { assert.equal(events.length, 2); },
+            function (events) {
+                assert.equal(events.length, 1);
+                done();
+            }
+        ]);
+        var receiver = batch({ timeout: 10, limit: 2 }, function (events) {
+            iterator = iterator(events);
         });
-        reciever('one');
-        reciever('two');
-        reciever('three');
+        receiver('one');
+        receiver('two');
+        receiver('three');
+    });
+
+    it('should support done callback function', function (done) {
+        var iterator = async.iterator([
+            function (events, cb) {
+                receiver('three');
+                receiver('four');
+                receiver('five');
+                setTimeout(function () {
+                    cb();
+                    receiver('six');
+                    receiver('seven');
+                }, 15);
+            },
+            function (events) {
+                assert.equal(events.length, 5);
+                done();
+            }
+        ]);
+        var receiver = batch({ timeout: 10 }, function (events, cb) {
+            iterator = iterator(events, cb);
+        });
+        receiver('one');
+        receiver('two');
     });
 
     it('should throw, if we provide invalid callback', function () {

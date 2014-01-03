@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "espower-loader": "~0.3.1",
-    "power-assert": "~0.3.1"
+    "power-assert": "~0.3.1",
+    "async": "~0.2.9"
   }
 }

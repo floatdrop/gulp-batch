@@ -36,7 +36,7 @@ be running your test only once per `git checkout` command (for example).
 __Callback signature__: `function(events, [done])`.
 
  * `events` - is `Array` of incoming events.
- * `done` - __Not implemented yet__ is callback for your function signal to batch, that you are done. This allows to run your callback as soon as previous end.
+ * `done` - is callback for your function signal to batch, that you are done. This allows to run your callback as soon as previous end.
 
 __Options__:
 
