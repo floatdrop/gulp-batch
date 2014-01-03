@@ -1,6 +1,7 @@
 /* global describe, it */
 'use strict';
 
+delete require.cache[require.resolve('..')];
 var batch = require('..');
 var assert = require('power-assert');
 
@@ -20,6 +21,6 @@ describe('glob-batch', function () {
             done();
         });
         reciever('one');
-        setTimeout(reciever.bind(null, 'two'), 200);
+        setTimeout(reciever.bind(null, 'two'), 100);
     });
 });

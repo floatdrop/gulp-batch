@@ -7,8 +7,29 @@ module.exports = function (opts, cb) {
     }
 
     opts.debounce = opts.debounce || 0;
+    opts.timeout = opts.timeout || 200;
+
+    var batch = [];
+
+    function flush() {
+        if (!batch.length) { return; }
+        var _batch = batch;
+        batch = [];
+        process.nextTick(cb.bind(null, _batch));
+
+    }
+
+    var timeout;
 
     return function (event) {
-        cb(event);
+        batch.push(event);
+        if (timeout) { clearTimeout(timeout); }
+
+        if (opts.limit && batch.length > opts.limit) {
+            flush();
+            return;
+        }
+
+        timeout = setTimeout(flush, opts.timeout);
     };
 };
