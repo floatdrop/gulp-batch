@@ -8,7 +8,7 @@
     "batch",
     "throttle",
     "debounce",
-    "gulpplugin",
+    "gulpfriendly",
     "watch",
     "mocha"
   ],
