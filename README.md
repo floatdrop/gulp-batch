@@ -1,9 +1,9 @@
-# gulp-batch [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][depstat-image]][depstat-url]
+# [gulp](https://github.com/gulpjs/gulp)-batch [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][depstat-image]][depstat-url]
 
 > Event batcher for gulp-watch'er.
 
 This is problem solver for [this issue](https://github.com/gulpjs/gulp/issues/80) with `gulp-watch` and `gulp-mocha`.
-Long story short - example below without `batch`'ing will call mocha as many times, as many files was changed (for example __all__ with `git checkout`).
+Long story short - example below without `batch`'ing will call mocha as many times, as many files was changed (for example `git checkout` can touch dozens files).
 
 ## Usage
 
