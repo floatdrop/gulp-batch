@@ -1,9 +1,17 @@
 {
   "name": "gulp-batch",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Event batcher for gulp-watcher",
   "main": "index.js",
-  "keywords": ["gulp", "batch", "throttle", "debounce", "gulpplugin", "watch", "mocha"],
+  "keywords": [
+    "gulp",
+    "batch",
+    "throttle",
+    "debounce",
+    "gulpplugin",
+    "watch",
+    "mocha"
+  ],
   "scripts": {
     "test": "gulp mocha"
   },
