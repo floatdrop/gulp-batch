@@ -7,7 +7,7 @@ module.exports = function (opts, cb) {
     }
 
     if (typeof cb !== 'function') {
-        throw new Error('Provided callback is not a function: ' + cb.toString());
+        throw new Error('Provided callback is not a function: ' + cb);
     }
 
     opts.debounce = opts.debounce || 0;

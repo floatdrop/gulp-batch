@@ -45,7 +45,7 @@ describe('glob-batch', function () {
     });
 
     it('should throw, if we provide invalid callback', function () {
-        assert.throws(batch, Error);
-        assert.throws(batch.bind(null, 'string'), Error);
+        assert.throws(batch, /Provided callback is not a function/);
+        assert.throws(batch.bind(null, 'string'), /Provided callback is not a function/);
     });
 });
