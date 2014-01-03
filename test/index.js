@@ -23,4 +23,9 @@ describe('glob-batch', function () {
         reciever('one');
         setTimeout(reciever.bind(null, 'two'), 100);
     });
+
+    it('should throw, if we provide invalid callback', function () {
+        assert.throws(batch, Error);
+        assert.throws(batch.bind(null, 'string'), Error);
+    });
 });
