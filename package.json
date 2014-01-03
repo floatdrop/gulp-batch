@@ -1,6 +1,6 @@
 {
   "name": "gulp-batch",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Event batcher for gulp-watcher",
   "main": "index.js",
   "keyworkds": "gulp batch throttle debounce",
