@@ -25,7 +25,7 @@ module.exports = function (opts, cb) {
         batch.push(event);
         if (timeout) { clearTimeout(timeout); }
 
-        if (opts.limit && batch.length > opts.limit) {
+        if (opts.limit && batch.length >= opts.limit) {
             flush();
             return;
         }
