@@ -19,7 +19,10 @@ var batch = require('gulp-batch');
 gulp.watch(['test/**', 'lib/**'], batch(function (events, cb) {
     gulp.src(['test/*.js'])
         .pipe(mocha({ reporter: 'list' }))
-        .on('error', console.log.bind(console))
+        .on('error', function (err) {
+            console.log(err.stack);
+            cb();
+        })
         .on('end', cb);
 }));
 ```

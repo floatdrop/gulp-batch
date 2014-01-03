@@ -6,17 +6,19 @@ var batch = require('./index.js');
 
 function noop() {}
 
-gulp.task('mocha', function () {
+gulp.task('mocha', function (cb) {
     gulp.src(['test/*.js'])
         .pipe(mocha({ reporter: 'list' }))
-        .on('error', function (error) {
-            console.log(error.stack);
-        });
+        .on('error', function (err) {
+            console.log(err.stack);
+            cb();
+        })
+        .on('end', cb);
 });
 
 gulp.task('watch', function () {
-    gulp.watch(['test/**', 'index.js'], batch(function () {
-        gulp.run('mocha');
+    gulp.watch(['test/**', 'index.js'], batch(function (events, cb) {
+        gulp.run('mocha', cb);
     }));
 });
 
