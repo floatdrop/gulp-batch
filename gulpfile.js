@@ -3,6 +3,7 @@
 var gulp = require('gulp');
 var mocha = require('gulp-mocha');
 var batch = require('./index.js');
+require('./enable-power-assert.js');
 
 function noop() {}
 
