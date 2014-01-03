@@ -6,6 +6,10 @@ module.exports = function (opts, cb) {
         opts = {};
     }
 
+    if (typeof cb !== 'function') {
+        throw new Error('Provided callback is not a function: ' + callback.toString());
+    }
+
     opts.debounce = opts.debounce || 0;
     opts.timeout = opts.timeout || 200;
 
@@ -16,7 +20,6 @@ module.exports = function (opts, cb) {
         var _batch = batch;
         batch = [];
         process.nextTick(cb.bind(null, _batch));
-
     }
 
     var timeout;
