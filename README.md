@@ -10,18 +10,21 @@ Long story short - example below without `batch`'ing will call mocha as many tim
 Main purpose for this module is running tests in `gulp-watch`. So here it is:
 
 ```js
-// npm i gulp gulp-watch gulp-mocha
-
+// npm i gulp gulp-watch gulp-mocha gulp-batch
+ 
 var gulp = require('gulp');
 var mocha = require('gulp-mocha');
 var batch = require('gulp-batch');
+var gutil = require('gulp-util');
 
-gulp.watch(['test/**', 'lib/**'], batch(function (events, cb) {
+gulp.task('mocha', function () {
     return gulp.src(['test/*.js'])
         .pipe(mocha({ reporter: 'list' }))
-        .on('error', function (err) {
-            console.log(err.stack);
-        });
+        .on('error', gutil.log);
+});
+
+gulp.src(['lib/**', 'test/**'], batch(function(events, cb) {
+    gulp.run('mocha', cb);
 }));
 ```
 
