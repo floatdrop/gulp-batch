@@ -39,7 +39,7 @@ be running your test only once per `git checkout` command (for example).
 __Callback signature__: `function(events, [done])`.
 
  * `events` - is `Array` of incoming events.
- * `done` - is callback for your function signal to batch, that you are done. This allows to run your callback as soon as previous end.
+ * `done` - is callback for your function signal to batch, that you are done. This allows to run your callback as soon as previous end. Error can be passed as argument.
 
 __Options__:
 
@@ -50,6 +50,24 @@ __Options__:
 __Returns__:
 
 Wrapped callback, that will gather events and call callback.
+
+## How to catch errors
+
+From version 0.3.0 `gulp-batch` supports domains. This code should clarify, how to catch errors from `gulp-batch`:
+
+```js
+var domain = require('domain').create();
+
+domain.on('error', function (err) {
+    console.log(err);
+});
+
+var receiver = domain.bind(batch({ timeout: 10 }, function () {
+    throw new Error('Bang!');
+}));
+
+receiver('one');
+```
 
 # License
 

@@ -23,7 +23,9 @@ module.exports = function (opts, cb) {
         }
     }
 
-    function async() {
+    function async(err) {
+        if (err) { throw err; }
+
         if (opts.debounce) {
             setTimeout(function () {
                 holdOn = false;
@@ -47,12 +49,17 @@ module.exports = function (opts, cb) {
         }
     }
 
+    var batchDomain = require('domain').create();
+    batchDomain.on('error', function (err) {
+        console.log(err);
+    });
+
     return function (event) {
         batch.push(event);
         if (timeout) { clearTimeout(timeout); }
 
         if (opts.limit && batch.length >= opts.limit) {
-            flush();
+            batchDomain.run(flush);
         } else {
             brace();
         }

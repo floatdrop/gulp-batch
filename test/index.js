@@ -7,6 +7,39 @@ var assert = require('power-assert');
 var async = require('async');
 
 describe('glob-batch', function () {
+    it('should support domains `on(\'error\', ...)` without callback', function (done) {
+        var domain = require('domain').create();
+        domain.on('error', function (err) {
+            done();
+        });
+        var receiver = domain.bind(batch({ timeout: 10 }, function () {
+            throw new Error('Bang!');
+        }));
+        receiver('one');
+    });
+
+    it('should support domains `on(\'error\', ...)` with callback', function (done) {
+        var domain = require('domain').create();
+        domain.on('error', function (err) {
+            done();
+        });
+        var receiver = domain.bind(batch({ timeout: 10 }, function (events, async) {
+            async(new Error('Bang!'));
+        }));
+        receiver('one');
+    });
+
+    it('should support domains `on(\'error\', ...)` with callback, but with throw', function (done) {
+        var domain = require('domain').create();
+        domain.on('error', function (err) {
+            done();
+        });
+        var receiver = domain.bind(batch({ timeout: 10 }, function (events, async) {
+            throw new Error('Bang!');
+        }));
+        receiver('one');
+    });
+
     it('should batch sync calls to array', function (done) {
         var receiver = batch({ timeout: 10 }, function (events) {
             assert.equal(events.length, 2);
