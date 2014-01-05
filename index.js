@@ -40,10 +40,10 @@ module.exports = function (opts, cb) {
         var _batch = batch;
         batch = [];
         if (cb.length < 2) {
-            process.nextTick(cb.bind(null, _batch));
+            process.nextTick(function () { cb(_batch); });
         } else {
             holdOn = true;
-            process.nextTick(cb.bind(null, _batch, async));
+            process.nextTick(function () { cb(_batch, async); });
         }
     }
 
