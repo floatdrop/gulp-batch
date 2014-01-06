@@ -49,17 +49,12 @@ module.exports = function (opts, cb) {
         }
     }
 
-    var batchDomain = require('domain').create();
-    batchDomain.on('error', function (err) {
-        console.log(err);
-    });
-
     return function (event) {
         batch.push(event);
         if (timeout) { clearTimeout(timeout); }
 
         if (opts.limit && batch.length >= opts.limit) {
-            batchDomain.run(flush);
+            flush();
         } else {
             brace();
         }

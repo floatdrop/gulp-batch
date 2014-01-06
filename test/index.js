@@ -10,9 +10,10 @@ describe('glob-batch', function () {
     it('should support domains `on(\'error\', ...)` without callback', function (done) {
         var domain = require('domain').create();
         domain.on('error', function (err) {
+            assert.ok(err);
             done();
         });
-        var receiver = domain.bind(batch({ timeout: 10 }, function () {
+        var receiver = batch({ timeout: 10 }, domain.bind(function () {
             throw new Error('Bang!');
         }));
         receiver('one');
@@ -21,9 +22,10 @@ describe('glob-batch', function () {
     it('should support domains `on(\'error\', ...)` with callback', function (done) {
         var domain = require('domain').create();
         domain.on('error', function (err) {
+            assert.ok(err);
             done();
         });
-        var receiver = domain.bind(batch({ timeout: 10 }, function (events, async) {
+        var receiver = batch({ timeout: 10 }, domain.bind(function (events, async) {
             async(new Error('Bang!'));
         }));
         receiver('one');
@@ -32,9 +34,10 @@ describe('glob-batch', function () {
     it('should support domains `on(\'error\', ...)` with callback, but with throw', function (done) {
         var domain = require('domain').create();
         domain.on('error', function (err) {
+            assert.ok(err);
             done();
         });
-        var receiver = domain.bind(batch({ timeout: 10 }, function (events, async) {
+        var receiver = batch({ timeout: 10 }, domain.bind(function (events, async) {
             throw new Error('Bang!');
         }));
         receiver('one');
@@ -132,4 +135,5 @@ describe('glob-batch', function () {
         assert.throws(batch, /Provided callback is not a function/);
         assert.throws(batch.bind(null, 'string'), /Provided callback is not a function/);
     });
+
 });
