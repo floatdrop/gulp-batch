@@ -63,7 +63,7 @@ domain.on('error', function (err) {
     console.log(err);
 });
 
-var receiver = batch({ timeout: 10 }, domain.bind(function () {
+var receiver = domain.bind(batch({ timeout: 10 }, function () {
     throw new Error('Bang!');
 }));
 

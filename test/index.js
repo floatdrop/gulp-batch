@@ -13,7 +13,7 @@ describe('glob-batch', function () {
             assert.ok(err);
             done();
         });
-        var receiver = batch({ timeout: 10 }, domain.bind(function () {
+        var receiver = domain.bind(batch({ timeout: 10 }, function () {
             throw new Error('Bang!');
         }));
         receiver('one');
@@ -25,7 +25,7 @@ describe('glob-batch', function () {
             assert.ok(err);
             done();
         });
-        var receiver = batch({ timeout: 10 }, domain.bind(function (events, async) {
+        var receiver = domain.bind(batch({ timeout: 10 }, function (events, async) {
             async(new Error('Bang!'));
         }));
         receiver('one');
@@ -37,7 +37,7 @@ describe('glob-batch', function () {
             assert.ok(err);
             done();
         });
-        var receiver = batch({ timeout: 10 }, domain.bind(function (events, async) {
+        var receiver = domain.bind(batch({ timeout: 10 }, function (events, async) {
             throw new Error('Bang!');
         }));
         receiver('one');

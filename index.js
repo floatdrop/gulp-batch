@@ -37,15 +37,18 @@ module.exports = function (opts, cb) {
         }
     }
 
+    var domain = require('domain').create();
+
     function flush() {
         if (!batch.length) { return; }
         var _batch = batch;
         batch = [];
+
         if (cb.length < 2) {
-            process.nextTick(function () { cb(_batch); });
+            process.nextTick(function () { domain.bind(cb)(_batch); });
         } else {
             holdOn = true;
-            process.nextTick(function () { cb(_batch, async); });
+            process.nextTick(function () { domain.bind(cb)(_batch, async); });
         }
     }
 
