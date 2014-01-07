@@ -13,7 +13,8 @@
     "mocha"
   ],
   "scripts": {
-    "test": "gulp mocha"
+    "test": "istanbul test _mocha --report html -- test/*.js --reporter spec",
+    "coveralls": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,10 @@
   },
   "devDependencies": {
     "gulp": "~3.2.2",
+    "coveralls": "~2.6.0",
+    "mocha": "~1.14.0",
+    "mocha-lcov-reporter": "0.0.1",
+    "istanbul": "~0.1.44",
     "gulp-mocha": "~0.2.0",
     "espower-loader": "~0.3.1",
     "power-assert": "~0.3.1",
