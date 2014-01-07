@@ -24,7 +24,7 @@ module.exports = function (opts, cb) {
     }
 
     function async(err) {
-        if (err) { throw err; }
+        if (err) { holdOn = false; throw err; }
 
         if (opts.debounce) {
             setTimeout(function () {
@@ -52,8 +52,9 @@ module.exports = function (opts, cb) {
         }
     }
 
-    return function (event) {
+    var f = function (event) {
         batch.push(event);
+
         if (timeout) { clearTimeout(timeout); }
 
         if (opts.limit && batch.length >= opts.limit) {
@@ -62,4 +63,8 @@ module.exports = function (opts, cb) {
             brace();
         }
     };
+
+    f.domain = domain;
+
+    return f;
 };
