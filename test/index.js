@@ -6,14 +6,34 @@ var batch = require('..');
 var assert = require('power-assert');
 var async = require('async');
 
+var defaultTimeout = 10,
+    defaultDebounce = 10;
+
 describe('glob-batch', function () {
+    it('should swap callback, if options omitted', function (done) {
+        var receiver = batch(function () { done(); });
+        receiver('one');
+    });
+
     it('should support domains `on(\'error\', ...)` without callback', function (done) {
         var domain = require('domain').create();
         domain.on('error', function (err) {
             assert.ok(err);
             done();
         });
-        var receiver = domain.bind(batch({ timeout: 10 }, function () {
+        var receiver = domain.bind(batch({ timeout: defaultTimeout }, function () {
+            throw new Error('Bang!');
+        }));
+        receiver('one');
+    });
+
+    it('should support domains `on(\'error\', ...)` without callback', function (done) {
+        var domain = require('domain').create();
+        domain.on('error', function (err) {
+            assert.ok(err);
+            done();
+        });
+        var receiver = domain.bind(batch({ timeout: defaultTimeout }, function () {
             throw new Error('Bang!');
         }));
         receiver('one');
@@ -25,7 +45,7 @@ describe('glob-batch', function () {
             assert.ok(err);
             done();
         });
-        var receiver = domain.bind(batch({ timeout: 10 }, function (events, async) {
+        var receiver = domain.bind(batch({ timeout: defaultTimeout }, function (events, async) {
             async(new Error('Bang!'));
         }));
         receiver('one');
@@ -37,14 +57,14 @@ describe('glob-batch', function () {
             assert.ok(err);
             done();
         });
-        var receiver = domain.bind(batch({ timeout: 10 }, function (events, async) {
+        var receiver = domain.bind(batch({ timeout: defaultTimeout }, function (events, async) {
             throw new Error('Bang!');
         }));
         receiver('one');
     });
 
     it('should batch sync calls to array', function (done) {
-        var receiver = batch({ timeout: 10 }, function (events) {
+        var receiver = batch({ timeout: defaultTimeout }, function (events) {
             assert.equal(events.length, 2);
             done();
         });
@@ -53,7 +73,7 @@ describe('glob-batch', function () {
     });
 
     it('should batch async calls to array', function (done) {
-        var receiver = batch({ timeout: 10 }, function (events) {
+        var receiver = batch({ timeout: defaultTimeout }, function (events) {
             assert.equal(events.length, 2);
             done();
         });
@@ -72,7 +92,7 @@ describe('glob-batch', function () {
         });
 
         receiver('one');
-        setTimeout(receiver.bind(null, 'two'), 10);
+        setTimeout(receiver.bind(null, 'two'), defaultTimeout);
     });
 
     it('should flush, if we exceed limit', function (done) {
@@ -83,7 +103,7 @@ describe('glob-batch', function () {
                 done();
             }
         ]);
-        var receiver = batch({ timeout: 10, limit: 2 }, function (events) {
+        var receiver = batch({ timeout: defaultTimeout, limit: 2 }, function (events) {
             iterator = iterator(events);
         });
         receiver('one');
@@ -105,7 +125,7 @@ describe('glob-batch', function () {
                 done();
             }
         ]);
-        var receiver = batch({ timeout: 10 }, function (events, cb) {
+        var receiver = batch({ timeout: defaultTimeout }, function (events, cb) {
             iterator = iterator(events, cb);
         });
         receiver('one');
@@ -125,7 +145,7 @@ describe('glob-batch', function () {
                 done();
             }
         ]);
-        var receiver = batch({ timeout: 10, debounce: 10 }, function (events, cb) {
+        var receiver = batch({ timeout: defaultTimeout, debounce: defaultDebounce }, function (events, cb) {
             iterator = iterator(events, cb);
         });
         receiver('one');
