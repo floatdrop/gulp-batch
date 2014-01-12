@@ -18,14 +18,9 @@ var mocha = require('gulp-mocha');
 var batch = require('gulp-batch');
 var gutil = require('gulp-util');
 
-gulp.task('mocha', function () {
-    return gulp.src(['test/*.js'])
-        .pipe(mocha({ reporter: 'list' }))
-        .on('error', gutil.log);
-});
-
-gulp.src(['lib/**', 'test/**'], batch(function(events, cb) {
-    gulp.run('mocha', cb);
+gulp.src(['lib/**', 'test/**'], batch(function(events) {
+    return events
+        .pipe(mocha({ reporter: 'list' }));
 }));
 ```
 
@@ -39,7 +34,7 @@ be running your test only once per `git checkout` command (for example).
 
 __Callback signature__: `function(events, [done])`.
 
- * `events` - is `Array` of incoming events.
+ * `events` - is `Stream` of incoming events.
  * `done` - is callback for your function signal to batch, that you are done. This allows to run your callback as soon as previous end. Error can be passed as argument.
 
 __Options__:

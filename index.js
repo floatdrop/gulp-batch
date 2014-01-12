@@ -1,5 +1,7 @@
 'use strict';
 
+var es = require('event-stream');
+
 module.exports = function (opts, cb) {
     if (typeof opts === 'function') {
         cb = opts;
@@ -23,32 +25,41 @@ module.exports = function (opts, cb) {
         }
     }
 
-    function async(err) {
-        if (err) { holdOn = false; throw err; }
+    function async() {
+        holdOn = true;
+        return function (err) {
+            if (err) {
+                holdOn = false;
+                return domain.emit('error', err);
+            }
 
-        if (opts.debounce) {
-            setTimeout(function () {
+            if (opts.debounce) {
+                setTimeout(function () {
+                    holdOn = false;
+                    brace();
+                }, opts.debounce);
+            } else {
                 holdOn = false;
                 brace();
-            }, opts.debounce);
-        } else {
-            holdOn = false;
-            brace();
-        }
+            }
+        };
     }
 
     var domain = require('domain').create();
 
     function flush() {
         if (!batch.length) { return; }
-        var _batch = batch;
+        var _batch = es.readArray(batch);
         batch = [];
 
         if (cb.length < 2) {
-            process.nextTick(function () { domain.bind(cb)(_batch); });
+            var r = domain.bind(cb)(_batch);
+            if (r && typeof r.pipe === 'function') {
+                // wait for stream to end
+                r.pipe(es.wait(async()));
+            }
         } else {
-            holdOn = true;
-            process.nextTick(function () { domain.bind(cb)(_batch, async); });
+            domain.bind(cb)(_batch, async());
         }
     }
 

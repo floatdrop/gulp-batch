@@ -4,12 +4,31 @@
 delete require.cache[require.resolve('..')];
 var batch = require('..');
 var assert = require('power-assert');
+var es = require('event-stream');
 var async = require('async');
 
 var defaultTimeout = 10,
     defaultDebounce = 10;
 
 describe('glob-batch', function () {
+
+    it('should attach holdOff to stream end', function (done) {
+        var signal = false;
+        var receiver = batch({ timeout: defaultTimeout }, function (events) {
+            return events.pipe(es.map(function (data, cb) {
+                if (signal) { done(new Error('Tasks was started parallel')); }
+                if (!signal && data === 'two') { done(); }
+                signal = true;
+                setTimeout(function () {
+                    signal = false;
+                    cb();
+                }, 20);
+            }));
+        });
+        receiver('one');
+        setTimeout(receiver.bind(receiver, 'two'), 15);
+    });
+
     it('should swap callback, if options omitted', function (done) {
         var receiver = batch(function () { done(); });
         receiver('one');
@@ -63,18 +82,22 @@ describe('glob-batch', function () {
         receiver('one');
     });
 
-    it('should batch sync calls to array', function (done) {
+    it('should batch sync calls to stream', function (done) {
         var receiver = batch({ timeout: defaultTimeout }, function (events) {
-            assert.equal(events.length, 2);
+            events.pipe(es.writeArray(function (err, array) {
+                assert.equal(array.length, 2);
+            }));
             done();
         });
         receiver('one');
         receiver('two');
     });
 
-    it('should batch async calls to array', function (done) {
+    it('should batch async calls to stream', function (done) {
         var receiver = batch({ timeout: defaultTimeout }, function (events) {
-            assert.equal(events.length, 2);
+            events.pipe(es.writeArray(function (err, array) {
+                assert.equal(array.length, 2);
+            }));
             done();
         });
         receiver('one');
@@ -83,7 +106,11 @@ describe('glob-batch', function () {
 
     it('should flush, if we exceed timeout', function (done) {
         var iterator = async.iterator([
-            function (events) { assert.equal(events.length, 1); },
+            function (events) {
+                events.pipe(es.writeArray(function (err, array) {
+                    assert.equal(array.length, 1);
+                }));
+            },
             function () { done(); }
         ]);
 
@@ -97,9 +124,15 @@ describe('glob-batch', function () {
 
     it('should flush, if we exceed limit', function (done) {
         var iterator = async.iterator([
-            function (events) { assert.equal(events.length, 2); },
             function (events) {
-                assert.equal(events.length, 1);
+                events.pipe(es.writeArray(function (err, array) {
+                    assert.equal(array.length, 2);
+                }));
+            },
+            function (events) {
+                events.pipe(es.writeArray(function (err, array) {
+                    assert.equal(array.length, 1);
+                }));
                 done();
             }
         ]);
@@ -121,7 +154,9 @@ describe('glob-batch', function () {
                 }, 15);
             },
             function (events) {
-                assert.equal(events.length, 2);
+                events.pipe(es.writeArray(function (err, array) {
+                    assert.equal(array.length, 2);
+                }));
                 done();
             }
         ]);
@@ -141,7 +176,9 @@ describe('glob-batch', function () {
                 }, 15);
             },
             function (events) {
-                assert.equal(events.length, 2);
+                events.pipe(es.writeArray(function (err, array) {
+                    assert.equal(array.length, 2);
+                }));
                 done();
             }
         ]);
