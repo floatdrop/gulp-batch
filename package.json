@@ -1,6 +1,6 @@
 {
   "name": "gulp-batch",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "description": "Event batcher for gulp-watcher",
   "main": "index.js",
   "keywords": [
