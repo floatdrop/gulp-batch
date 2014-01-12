@@ -16,7 +16,6 @@ Main purpose for this module is running tests in `gulp-watch`. So here it is:
 var gulp = require('gulp');
 var mocha = require('gulp-mocha');
 var batch = require('gulp-batch');
-var gutil = require('gulp-util');
 
 gulp.src(['lib/**', 'test/**'], batch(function(events) {
     return events
