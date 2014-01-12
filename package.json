@@ -35,5 +35,8 @@
     "espower-loader": "~0.3.1",
     "power-assert": "~0.3.1",
     "async": "~0.2.9"
+  },
+  "dependencies": {
+    "event-stream": "~3.1.0"
   }
 }
