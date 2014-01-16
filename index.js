@@ -50,13 +50,22 @@ module.exports = function (opts, cb) {
     function flush() {
         if (!batch.length) { return; }
         var _batch = es.readArray(batch);
+        var streamError;
         batch = [];
-
         if (cb.length < 2) {
             var r = domain.bind(cb)(_batch);
             if (r && typeof r.pipe === 'function') {
+                var asyncCb = async();
                 // wait for stream to end
-                r.pipe(es.wait(async()));
+                r.on('error', function (err) {
+                    streamError = err;
+                });
+                r.on('data', function () {
+                    streamError = null; // The error wasn't fatal, move along
+                });
+                r.once('end', function () {
+                    asyncCb(streamError);
+                });
             }
         } else {
             domain.bind(cb)(_batch, async());
