@@ -34,7 +34,6 @@
     "stream-assert": "^2.0.1"
   },
   "dependencies": {
-    "array-stream": "^0.1.1",
     "bach": "^0.3.0",
     "stream-array": "^0.1.3"
   }
