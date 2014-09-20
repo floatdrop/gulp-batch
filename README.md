@@ -12,7 +12,7 @@ Main purpose for this module is running tests in `gulp-watch`. So here it is:
 
 ```js
 // npm i gulp gulp-watch gulp-mocha gulp-batch
- 
+
 var gulp = require('gulp');
 var mocha = require('gulp-mocha');
 var batch = require('gulp-batch');
@@ -25,7 +25,7 @@ gulp.src(['lib/**', 'test/**'], batch(function(events) {
 
 ## API
 
-### batch([options,] callback)
+### batch([options,] callback, [errorHandler])
 
 This function creates batcher for provided callback.
 It will call it, when bunch of events happens near in time, so you will
@@ -38,31 +38,16 @@ __Callback signature__: `function(events, [done])`.
 
 __Options__:
 
- * `debounce` - Minimal interval between calling callback after `done` (only works with async callback) (default: `0`)
  * `limit` - Maximum events number, that gets into one batch (default: `undefined` - unlimited)
  * `timeout` - Interval in milliseconds, that counts as "no more events will arrive" (default: `200`)
+
+__Errors__:
+
+All errors in batched function will be passed to `errorHandler`.
 
 __Returns__:
 
 Wrapped callback, that will gather events and call callback.
-
-## How to catch errors
-
-From version 0.3.0 `gulp-batch` supports domains. This code should clarify, how to catch errors from `gulp-batch`:
-
-```js
-var domain = require('domain').create();
-
-domain.on('error', function (err) {
-    console.log(err);
-});
-
-var receiver = domain.bind(batch({ timeout: 10 }, function () {
-    throw new Error('Bang!');
-}));
-
-receiver('one');
-```
 
 # License
 

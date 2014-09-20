@@ -1,9 +1,11 @@
 'use strict';
 
-var es = require('event-stream');
+var array = require('stream-array');
+var bach = require('bach');
 
-module.exports = function (opts, cb) {
+module.exports = function (opts, cb, errorHandler) {
     if (typeof opts === 'function') {
+        errorHandler = cb;
         cb = opts;
         opts = {};
     }
@@ -12,67 +14,29 @@ module.exports = function (opts, cb) {
         throw new Error('Provided callback is not a function: ' + cb);
     }
 
-    opts.debounce = opts.debounce || 0;
-    opts.timeout = opts.timeout || 200;
+    opts.timeout = opts.timeout || 100;
 
     var batch = [];
     var holdOn;
     var timeout;
 
-    function brace() {
+    function setupFlushTimeout() {
         if (!holdOn && batch.length) {
             timeout = setTimeout(flush, opts.timeout);
         }
     }
 
-    function async() {
-        holdOn = true;
-        return function (err) {
-            if (err) {
-                holdOn = false;
-                return domain.emit('error', err);
-            }
-
-            if (opts.debounce) {
-                setTimeout(function () {
-                    holdOn = false;
-                    brace();
-                }, opts.debounce);
-            } else {
-                holdOn = false;
-                brace();
-            }
-        };
-    }
-
-    var domain = require('domain').create();
-
     function flush() {
-        if (!batch.length) { return; }
-        var _batch = es.readArray(batch);
-        var streamError;
+        var holdOn = true;
+        var waiter = bach.parallel(cb.bind(cb, array(batch)));
         batch = [];
-        if (cb.length < 2) {
-            var r = domain.bind(cb)(_batch);
-            if (r && typeof r.pipe === 'function') {
-                var asyncCb = async();
-                // wait for stream to end
-                r.on('error', function (err) {
-                    streamError = err;
-                });
-                r.on('data', function () {
-                    streamError = null; // The error wasn't fatal, move along
-                });
-                r.once('end', function () {
-                    asyncCb(streamError);
-                });
-            }
-        } else {
-            domain.bind(cb)(_batch, async());
-        }
+        waiter(function (err) {
+            holdOn = false;
+            if (err && typeof errorHandler === 'function') { errorHandler(err); }
+        });
     }
 
-    var f = function (event) {
+    return function (event) {
         batch.push(event);
 
         if (timeout) { clearTimeout(timeout); }
@@ -80,11 +44,7 @@ module.exports = function (opts, cb) {
         if (opts.limit && batch.length >= opts.limit) {
             flush();
         } else {
-            brace();
+            setupFlushTimeout();
         }
     };
-
-    f.domain = domain;
-
-    return f;
 };
