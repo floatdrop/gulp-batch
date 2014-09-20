@@ -1,4 +1,4 @@
-# [gulp](https://github.com/gulpjs/gulp)-batch [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status](https://coveralls.io/repos/floatdrop/gulp-batch/badge.png)](https://coveralls.io/r/floatdrop/gulp-batch) [![Dependency Status][depstat-image]][depstat-url]
+# [gulp](https://github.com/gulpjs/gulp)-batch [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependency Status][depstat-image]][depstat-url]
 > Event batcher for gulp-watch'er.
 
 This is problem solver for [this issue](https://github.com/gulpjs/gulp/issues/80) with [gulp.watch](https://github.com/gulpjs/gulp#gulpwatchglob-cb) and [gulp-mocha](https://github.com/sindresorhus/gulp-mocha).
@@ -62,10 +62,13 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 [npm-url]: https://npmjs.org/package/gulp-batch
-[npm-image]: https://badge.fury.io/js/gulp-batch.png
+[npm-image]: http://img.shields.io/npm/v/gulp-batch.svg?style=flat
 
-[travis-url]: http://travis-ci.org/floatdrop/gulp-batch
-[travis-image]: https://travis-ci.org/floatdrop/gulp-batch.png?branch=master
+[travis-url]: https://travis-ci.org/floatdrop/gulp-batch
+[travis-image]: http://img.shields.io/travis/floatdrop/gulp-batch.svg?style=flat
+
+[coveralls-url]: https://coveralls.io/r/floatdrop/gulp-batch
+[coveralls-image]: http://img.shields.io/coveralls/floatdrop/gulp-batch.svg?style=flat
 
 [depstat-url]: https://david-dm.org/floatdrop/gulp-batch
-[depstat-image]: https://david-dm.org/floatdrop/gulp-batch.png?theme=shields.io
+[depstat-image]: http://img.shields.io/david/floatdrop/gulp-batch.svg?style=flat
