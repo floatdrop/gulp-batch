@@ -1,7 +1,7 @@
 'use strict';
 
 var array = require('stream-array');
-var bach = require('bach');
+var asyncDone = require('async-done');
 
 module.exports = function (opts, cb, errorHandler) {
     if (typeof opts === 'function') {
@@ -28,12 +28,11 @@ module.exports = function (opts, cb, errorHandler) {
 
     function flush() {
         var holdOn = true;
-        var waiter = bach.parallel(cb.bind(cb, array(batch)));
-        batch = [];
-        waiter(function (err) {
+        asyncDone(cb.bind(cb, array(batch)), function (err) {
             holdOn = false;
             if (err && typeof errorHandler === 'function') { errorHandler(err); }
         });
+        batch = [];
     }
 
     return function (event) {
