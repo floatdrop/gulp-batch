@@ -11,15 +11,11 @@ Also it is used in [`gulp-watch`](https://github.com/floatdrop/gulp-watch) to pr
 Main purpose for this module is running tests in `gulp-watch`. So here it is:
 
 ```js
-// npm i gulp gulp-watch gulp-mocha gulp-batch
-
 var gulp = require('gulp');
-var mocha = require('gulp-mocha');
 var batch = require('gulp-batch');
 
-gulp.src(['lib/**', 'test/**'], batch(function(events) {
-    return events
-        .pipe(mocha({ reporter: 'list' }));
+gulp.watch(['lib/**', 'test/**'], batch(function(events) {
+    return events.pipe(console.log);
 }));
 ```
 
