@@ -28,7 +28,7 @@ module.exports = function (opts, cb, errorHandler) {
 
     function flush() {
         var holdOn = true;
-        asyncDone(cb.bind(cb, array(batch)), function (err) {
+        asyncDone(cb.bind(cb, array(batch.concat(null))), function (err) {
             holdOn = false;
             if (err && typeof errorHandler === 'function') { errorHandler(err); }
         });
