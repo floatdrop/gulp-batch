@@ -38,14 +38,15 @@ describe('gulp-batch', function () {
 
     it('should flush, if we exceed timeout', function (done) {
         var i = 0;
-        var receiver = batch({ timeout: 5 }, function (events) {
+        var receiver = batch({ timeout: 5 }, function (events, cb) {
             events.pipe(assert.length(1))
                 .on('assertion', done);
             if (++i === 2) { done(); }
+            cb();
         });
 
         receiver('one');
-        setTimeout(receiver, defaultTimeout + 1, 'two');
+        setTimeout(receiver, defaultTimeout + 10, 'two');
     });
 
     it('should flush, if we exceed limit', function (done) {

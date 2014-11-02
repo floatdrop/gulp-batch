@@ -33,10 +33,7 @@ module.exports = function (opts, cb, errorHandler) {
         asyncDone(cb.bind(cb, array(currentBatch)), function (err) {
             holdOn = false;
             if (err && typeof errorHandler === 'function') { errorHandler(err); }
-
-            if (batch.length) {
-                setupFlushTimeout();
-            }
+            setupFlushTimeout();
         });
     }
 

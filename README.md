@@ -35,7 +35,7 @@ __Callback signature__: `function(events, [done])`.
 __Options__:
 
  * `limit` - Maximum events number, that gets into one batch (default: `undefined` - unlimited)
- * `timeout` - Interval in milliseconds, that counts as "no more events will arrive" (default: `200`)
+ * `timeout` - Interval in milliseconds, that counts as "no more events will arrive" (default: `100`)
 
 __Errors__:
 
