@@ -35,6 +35,6 @@
   },
   "dependencies": {
     "async-done": "^0.4.0",
-    "stream-array": "^0.1.3"
+    "event-stream": "^3.1.7"
   }
 }
