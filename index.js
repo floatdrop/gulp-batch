@@ -27,12 +27,17 @@ module.exports = function (opts, cb, errorHandler) {
     }
 
     function flush() {
-        var holdOn = true;
-        asyncDone(cb.bind(cb, array(batch)), function (err) {
+        holdOn = true;
+        var currentBatch = batch;
+        batch = [];
+        asyncDone(cb.bind(cb, array(currentBatch)), function (err) {
             holdOn = false;
             if (err && typeof errorHandler === 'function') { errorHandler(err); }
+
+            if (batch.length) {
+                setupFlushTimeout();
+            }
         });
-        batch = [];
     }
 
     return function (event) {
