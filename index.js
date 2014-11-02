@@ -1,6 +1,6 @@
 'use strict';
 
-var array = require('stream-array');
+var array = require('event-stream').readArray;
 var asyncDone = require('async-done');
 
 module.exports = function (opts, cb, errorHandler) {
