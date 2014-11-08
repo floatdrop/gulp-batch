@@ -27,7 +27,7 @@ This function creates batcher for provided callback.
 It will call it, when bunch of events happens near in time, so you will
 be running your test only once per `git checkout` command (for example).
 
-__Callback signature__: `function(events, [done])`.
+__Callback signature__: `function(events, done)`.
 
  * `events` - is `Stream` of incoming events.
  * `done` - is callback for your function signal to batch, that you are done. This allows to run your callback as soon as previous end. Error can be passed as argument.
