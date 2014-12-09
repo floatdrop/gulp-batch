@@ -26,15 +26,15 @@
     "url": "https://github.com/floatdrop/gulp-batch/issues"
   },
   "devDependencies": {
-    "coveralls": "^2.11.1",
-    "istanbul": "^0.3.2",
-    "mocha": "^1.21.4",
+    "coveralls": "^2.11.2",
+    "istanbul": "^0.3.5",
+    "mocha": "^2.0.1",
     "mocha-lcov-reporter": "0.0.1",
-    "should": "^4.0.4",
-    "stream-assert": "^2.0.1"
+    "should": "^4.3.1",
+    "stream-assert": "^2.0.2"
   },
   "dependencies": {
-    "async-done": "^0.4.0",
-    "stream-array": "^1.0.0"
+    "async-done": "^1.0.0",
+    "stream-array": "^1.0.1"
   }
 }
