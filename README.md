@@ -4,7 +4,7 @@
 This is problem solver for [this issue](https://github.com/gulpjs/gulp/issues/80) with [gulp.watch](https://github.com/gulpjs/gulp#gulpwatchglob-cb) and [gulp-mocha](https://github.com/sindresorhus/gulp-mocha).
 Long story short - example below without `batch`'ing will call mocha as many times, as many files was changed (for example `git checkout` can touch dozens files).
 
-Also it is used in [`gulp-watch`](https://github.com/floatdrop/gulp-watch) to provide batching callback handler, instead of streaming events from gaze.
+Also it can be used with [`gulp-watch`](https://github.com/floatdrop/gulp-watch) to provide batching callback handler, instead of streaming events from gaze.
 
 ## Usage
 
