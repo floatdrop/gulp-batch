@@ -16,7 +16,7 @@ var batch = require('gulp-batch');
 var debug = require('gulp-debug');
 
 gulp.watch(['lib/**', 'test/**'], batch(function(events) {
-    return events.pipe(debug);
+    return events.pipe(debug());
 }));
 ```
 
