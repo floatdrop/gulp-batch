@@ -13,9 +13,10 @@ Main purpose for this module is running tests in `gulp-watch`. So here it is:
 ```js
 var gulp = require('gulp');
 var batch = require('gulp-batch');
+var debug = require('gulp-debug');
 
 gulp.watch(['lib/**', 'test/**'], batch(function(events) {
-    return events.pipe(console.log);
+    return events.pipe(debug);
 }));
 ```
 
